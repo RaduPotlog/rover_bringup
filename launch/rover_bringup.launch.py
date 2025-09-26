@@ -117,36 +117,9 @@ def generate_launch_description():
         ]
     )
 
-    gamepad_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            PathJoinSubstitution(
-                [FindPackageShare("joy2twist"), "launch", "gamepad_controller.launch.py"]
-            )
-        ),
-        launch_arguments={
-            "log_level": log_level,
-            "namespace": namespace,
-            "joy2twist_params_file": PathJoinSubstitution(
-                [
-                    rover_bringup_common_dir,
-                    "config",
-                    PythonExpression(["'bringup_", robot_model_name, ".yaml'"]),
-                ]
-            ),
-        }.items(),
-        condition=IfCondition(launch_gamepad),
-    )
-
     prevent_exit_action = ExecuteProcess(
         cmd=["sleep", "infinity"],
         condition=UnlessCondition(exit_on_wrong_hw),
-    )
-
-    delayed_action = TimerAction(
-        period=10.0,
-        actions=[
-            gamepad_launch,
-        ],
     )
 
     actions = [

@@ -3,13 +3,12 @@
 <package format="3">
   <name>rover_bringup</name>
   <version>0.0.0</version>
-  <description>Package containing the default launch files and configuration used to start Rover</description>
+  <description> The package containing the default launch files and configuration used to start Rover</description>
   <maintainer email="potlogradu@gmail.com">radupotlog</maintainer>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <exec_depend condition="$ROVER_ROS_BUILD_TYPE == hardware">joy2twist</exec_depend>
   <exec_depend condition="$ROVER_ROS_BUILD_TYPE == hardware">launch</exec_depend>
   <exec_depend condition="$ROVER_ROS_BUILD_TYPE == hardware">launch_ros</exec_depend>
   
