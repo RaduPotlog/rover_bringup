@@ -73,7 +73,7 @@ def generate_launch_description():
     namespace = LaunchConfiguration("namespace")
     declare_namespace_arg = DeclareLaunchArgument(
         "namespace",
-        default_value=EnvironmentVariable("ROBOT_NAMESPACE", default_value=""),
+        default_value=EnvironmentVariable("ROVER_NAMESPACE", default_value=""),
         description="Add namespace to all launched nodes.",
     )
 
@@ -103,6 +103,19 @@ def generate_launch_description():
             "namespace": namespace,
             "use_sim": "False",
         }.items(),
+    )
+
+    system_diag_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("rover_diag_manager"),
+                    "launch",
+                    "system_diag.launch.py",
+                ]
+            ),
+        ),
+        launch_arguments={"log_level": log_level, "namespace": namespace}.items(),
     )
 
     ekf_launch = IncludeLaunchDescription(
@@ -148,6 +161,7 @@ def generate_launch_description():
     driver_actions = GroupAction(
         [
             controller_launch,
+            # system_diag_launch,
             delayed_action,
         ],
         condition=IfCondition(hw_config_correct),
