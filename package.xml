@@ -14,7 +14,8 @@
   
   <!-- Rover dependency -->
   <exec_depend condition="$ROVER_ROS_BUILD_TYPE == hardware">rover_controller</exec_depend>
-
+  <exec_depend condition="$ROVER_ROS_BUILD_TYPE == hardware">rover_localization</exec_depend>
+  
   <export>
     <build_type>ament_cmake</build_type>
   </export>

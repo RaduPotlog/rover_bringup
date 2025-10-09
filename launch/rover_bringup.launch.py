@@ -105,6 +105,19 @@ def generate_launch_description():
         }.items(),
     )
 
+    ekf_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution(
+                [FindPackageShare("rover_localization"), "launch", "rover_localization.launch.py"]
+            )
+        ),
+        launch_arguments={
+            "log_level": log_level,
+            "namespace": namespace,
+            "common_dir_path": common_dir_path,
+        }.items(),
+    )
+
     rover_bringup_common_dir = PythonExpression(
         [
             "'",
@@ -122,13 +135,31 @@ def generate_launch_description():
         condition=UnlessCondition(exit_on_wrong_hw),
     )
 
+    delayed_action = TimerAction(
+        period=10.0,
+        actions=[
+            ekf_launch,
+        ],
+    )
+
+    # TODO: Handle hardware configuration
+    hw_config_correct = EnvironmentVariable(name="ROBOT_HW_CONFIG_CORRECT", default_value="true")
+
+    driver_actions = GroupAction(
+        [
+            controller_launch,
+            delayed_action,
+        ],
+        condition=IfCondition(hw_config_correct),
+    )
+
     actions = [
         declare_exit_on_wrong_hw_arg,
         declare_common_dir_path_arg,
         declare_disable_manager_arg,
         declare_log_level_arg,
         declare_namespace_arg,
-        controller_launch,
+        driver_actions,
     ]
 
     return LaunchDescription(actions)
