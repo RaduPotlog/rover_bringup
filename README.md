@@ -1,6 +1,6 @@
 # rover_bringup
 
-The package containing the default launch files and configuration used to start Rover.
+Package containing the default launch files and configuration used to start Rover.
 
 ## Config Files
 -
