@@ -161,7 +161,7 @@ def generate_launch_description():
     driver_actions = GroupAction(
         [
             controller_launch,
-            # system_diag_launch,
+            system_diag_launch,
             delayed_action,
         ],
         condition=IfCondition(hw_config_correct),
