@@ -131,6 +131,19 @@ def generate_launch_description():
         }.items(),
     )
 
+    web_bridge_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution(
+                [FindPackageShare("rover_web_bridge"), "launch", "rover_web_bridge.launch.py"]
+            )
+        ),
+        launch_arguments={
+            "log_level": log_level,
+            "namespace": namespace,
+            "common_dir_path": common_dir_path,
+        }.items(),
+    )
+
     rover_bringup_common_dir = PythonExpression(
         [
             "'",
@@ -152,6 +165,7 @@ def generate_launch_description():
         period=10.0,
         actions=[
             ekf_launch,
+            web_bridge_launch,
         ],
     )
 
