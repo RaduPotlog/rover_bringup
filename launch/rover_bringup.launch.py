@@ -143,6 +143,22 @@ def generate_launch_description():
             "common_dir_path": common_dir_path,
         }.items(),
     )
+    
+    rover_crsf_teleop_path = "/home/rovera1/ros2_ws/rover_a1/install/husarion_ugv_crsf_teleop/share/husarion_ugv_crsf_teleop/config/rover_crsf_teleop.yaml"
+
+    rover_crsf_teleop_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution(
+                [FindPackageShare("husarion_ugv_crsf_teleop"), "launch", "teleop.launch.py"]
+            )
+        ),
+        launch_arguments={
+            "log_level": log_level,
+            "namespace": namespace,
+            "common_dir_path": common_dir_path,
+            "params_file": rover_crsf_teleop_path,
+        }.items(),
+    )
 
     rover_bringup_common_dir = PythonExpression(
         [
@@ -165,6 +181,7 @@ def generate_launch_description():
         period=10.0,
         actions=[
             ekf_launch,
+            rover_crsf_teleop_launch,
             web_bridge_launch,
         ],
     )
